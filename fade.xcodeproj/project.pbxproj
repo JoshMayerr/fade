@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F40364972F1316DE00C794DF /* IBMPlexMono-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F40364942F1316DE00C794DF /* IBMPlexMono-Medium.ttf */; };
+		F40364982F1316DE00C794DF /* Joshfont2-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F40364952F1316DE00C794DF /* Joshfont2-Regular.otf */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		F403641E2F12FF3500C794DF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +32,8 @@
 		F40364102F12FF3300C794DF /* fade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F403641D2F12FF3500C794DF /* fadeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fadeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F40364272F12FF3500C794DF /* fadeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = fadeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F40364942F1316DE00C794DF /* IBMPlexMono-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "IBMPlexMono-Medium.ttf"; sourceTree = "<group>"; };
+		F40364952F1316DE00C794DF /* Joshfont2-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Joshfont2-Regular.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -79,6 +86,7 @@
 				F40364202F12FF3500C794DF /* fadeTests */,
 				F403642A2F12FF3500C794DF /* fadeUITests */,
 				F40364112F12FF3300C794DF /* Products */,
+				F40364962F1316DE00C794DF /* Fonts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +98,15 @@
 				F40364272F12FF3500C794DF /* fadeUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F40364962F1316DE00C794DF /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F40364942F1316DE00C794DF /* IBMPlexMono-Medium.ttf */,
+				F40364952F1316DE00C794DF /* Joshfont2-Regular.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +229,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F40364972F1316DE00C794DF /* IBMPlexMono-Medium.ttf in Resources */,
+				F40364982F1316DE00C794DF /* Joshfont2-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
