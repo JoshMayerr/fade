@@ -33,22 +33,23 @@ struct MainView: View {
                 
                 VStack(spacing: 20) {
                     Text("\(daysFree)")
-                        .font(.system(size: 96, weight: .bold))
-                        .foregroundColor(.primary)
+                        .font(.joshFont(size: 96))
+                        .foregroundColor(.primaryBrand)
                     
                     Text("days free")
-                        .font(.title2)
-                        .foregroundColor(.secondary)
+                        .font(.ibmPlexMono(size: 20))
+                        .foregroundColor(.primaryBrand.opacity(0.7))
                     
                     Text(formattedDate)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .font(.ibmPlexMono(size: 14))
+                        .foregroundColor(.primaryBrand.opacity(0.6))
                         .padding(.top, 8)
                 }
                 
                 Spacer()
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.appBackground.ignoresSafeArea())
             .navigationTitle("fade")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -58,6 +59,7 @@ struct MainView: View {
                 }
             }
         }
+        .background(Color.appBackground.ignoresSafeArea())
     }
 }
 

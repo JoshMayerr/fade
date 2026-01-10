@@ -45,6 +45,7 @@ struct OnboardingContainerView: View {
         }
         .tabViewStyle(.page)
         .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .background(Color.appBackground.ignoresSafeArea())
     }
 }
 

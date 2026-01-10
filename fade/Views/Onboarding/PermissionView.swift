@@ -93,6 +93,7 @@ struct PermissionView: View {
                 .frame(height: 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.appBackground.ignoresSafeArea())
         .onAppear {
             // Check authorization status on appear
             Task {

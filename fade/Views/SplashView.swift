@@ -13,13 +13,13 @@ struct SplashView: View {
             Spacer()
             
             Text("fade")
-                .font(.system(size: 48, weight: .bold))
-                .foregroundColor(.primary)
+                .font(.joshFont(size: 48))
+                .foregroundColor(.primaryBrand)
             
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
+        .background(Color.appBackground.ignoresSafeArea())
     }
 }
 

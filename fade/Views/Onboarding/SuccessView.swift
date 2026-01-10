@@ -49,6 +49,7 @@ struct SuccessView: View {
             .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.appBackground.ignoresSafeArea())
         .onAppear {
             // Auto-block apps and set first block date
             manager.blockApps()
