@@ -12,7 +12,9 @@ struct MainView: View {
     @StateObject private var manager = ScreenTimeManager.shared
     @AppStorage("firstBlockDate") private var firstBlockDate: Double = 0
     @AppStorage("isBlocking") private var isBlocking = false
+    @AppStorage("shouldShowSuccessModal") private var shouldShowSuccessModal = false
     @State private var currentTime = Date()
+    @State private var showSuccessModal = false
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     private var timeComponents: TimeComponents {
@@ -133,6 +135,9 @@ struct MainView: View {
             }
         }
         .background(Color.appBackground.ignoresSafeArea())
+        .sheet(isPresented: $showSuccessModal) {
+            SuccessModal(manager: manager, isPresented: $showSuccessModal)
+        }
         .onReceive(timer) { _ in
             currentTime = Date()
         }
@@ -143,6 +148,18 @@ struct MainView: View {
             // Re-apply blocks if they were on when app closed
             if manager.isAuthorized && isBlocking {
                 manager.blockApps()
+            }
+            
+            // Show success modal if flag is set
+            if shouldShowSuccessModal {
+                showSuccessModal = true
+                shouldShowSuccessModal = false
+            }
+        }
+        .onChange(of: showSuccessModal) { newValue in
+            // Clear the flag when modal is dismissed
+            if !newValue {
+                shouldShowSuccessModal = false
             }
         }
     }

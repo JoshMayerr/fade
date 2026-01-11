@@ -12,6 +12,7 @@ struct OnboardingContainerView: View {
     @StateObject private var manager = ScreenTimeManager.shared
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("isAuthorized") private var isAuthorized = false
+    @AppStorage("shouldShowSuccessModal") private var shouldShowSuccessModal = false
     
     var body: some View {
         TabView(selection: $currentStep) {
@@ -25,32 +26,25 @@ struct OnboardingContainerView: View {
             PermissionView(
                 manager: manager,
                 onPermissionGranted: {
-                    withAnimation {
-                        currentStep = 2
-                    }
+                    hasCompletedOnboarding = true
+                    shouldShowSuccessModal = true
                 },
                 onPermissionDenied: {
                     // Permission denied - PermissionView handles UI state
                 }
             )
             .tag(1)
-            
-            SuccessView(
-                manager: manager,
-                onDone: {
-                    hasCompletedOnboarding = true
-                }
-            )
-            .tag(2)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .background(Color.appBackground.ignoresSafeArea())
         .overlay(alignment: .bottom) {
-            CustomPageIndicator(numberOfPages: 3, currentPage: currentStep)
+            // Page indicator for WelcomeView and PermissionView
+            CustomPageIndicator(numberOfPages: 2, currentPage: currentStep)
                 .padding(.bottom, 20)
         }
     }
 }
+
 
 #Preview {
     OnboardingContainerView()

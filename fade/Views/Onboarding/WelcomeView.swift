@@ -35,22 +35,8 @@ struct WelcomeView: View {
 
             // Description text (custom text to be provided)
             VStack(spacing: 14) {
-                Text("social media is not the problem, short-form content is.")
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
                 Text("""
-                it seems kinda like cigarettes back in the day. people know it's bad, but it's fun! and it's already so woven into society that it's hard to avoid.
-                """)
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-                Text("""
-                this app is meant to be an way just to rip it out of your life and move on.
+                short form content is really bad. you know that, so this is the chance to remove it from your brain.
                 """)
                     .font(.ibmPlexMono(size: 14, weight: .semibold))
                     .foregroundColor(.primaryBrand)
@@ -59,7 +45,7 @@ struct WelcomeView: View {
 
 
                 Text("""
-                it is exploiting your brain, see what happens when you fade it away.
+                give it a try!
                 """)
                     .font(.ibmPlexMono(size: 14, weight: .semibold))
                     .foregroundColor(.primaryBrand)
