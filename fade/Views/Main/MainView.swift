@@ -17,7 +17,7 @@ struct MainView: View {
 
     private var timeComponents: TimeComponents {
         if firstBlockDate == 0 {
-            return TimeComponents(weeks: 0, days: 0, minutes: 0, seconds: 0)
+            return TimeComponents(weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
         }
         let date = Date(timeIntervalSince1970: firstBlockDate)
         return DateHelper.timeComponentsSince(date: date, referenceDate: currentTime)
@@ -37,9 +37,19 @@ struct MainView: View {
                 Color.appBackground.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // Settings button with liquid glass effect
+                    // Logo and settings button
                     HStack {
+                        Image("FadeLogo")
+                            .resizable()
+                            .renderingMode(.template)
+                            .foregroundColor(.accentBrand)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 40)
+                            .padding(.leading, 20)
+                            .padding(.top, 8)
+
                         Spacer()
+
                         NavigationLink(destination: SettingsView()) {
                             Image(systemName: "gearshape.fill")
                                 .font(.system(size: 20, weight: .medium))
@@ -55,52 +65,67 @@ struct MainView: View {
                     Spacer()
 
                     // Counter display
-                    VStack(spacing: 30) {
-                        // Weeks
-                        VStack(spacing: 8) {
-                            Text("\(timeComponents.weeks)")
-                                .font(.joshFont(size: 72))
-                                .foregroundColor(.primaryBrand)
-                            Text("weeks")
-                                .font(.ibmPlexMono(size: 18))
-                                .foregroundColor(.primaryBrand.opacity(0.7))
-                        }
+                    HStack {
+                        VStack(alignment: .leading, spacing: 30) {
+                            // Weeks
+                            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                Text(String(format: "%02d", timeComponents.weeks))
+                                    .font(.joshFont(size: 56))
+                                    .foregroundColor(.primaryBrand)
+                                Text("W")
+                                    .font(.ibmPlexMono(size: 14))
+                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            }
 
-                        // Days
-                        VStack(spacing: 8) {
-                            Text("\(timeComponents.days)")
-                                .font(.joshFont(size: 72))
-                                .foregroundColor(.primaryBrand)
-                            Text("days")
-                                .font(.ibmPlexMono(size: 18))
-                                .foregroundColor(.primaryBrand.opacity(0.7))
-                        }
+                            // Days
+                            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                Text(String(format: "%02d", timeComponents.days))
+                                    .font(.joshFont(size: 56))
+                                    .foregroundColor(.primaryBrand)
+                                Text("D")
+                                    .font(.ibmPlexMono(size: 14))
+                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            }
 
-                        // Minutes
-                        VStack(spacing: 8) {
-                            Text("\(timeComponents.minutes)")
-                                .font(.joshFont(size: 72))
-                                .foregroundColor(.primaryBrand)
-                            Text("mins")
-                                .font(.ibmPlexMono(size: 18))
-                                .foregroundColor(.primaryBrand.opacity(0.7))
-                        }
+                            // Hours
+                            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                Text(String(format: "%02d", timeComponents.hours))
+                                    .font(.joshFont(size: 56))
+                                    .foregroundColor(.primaryBrand)
+                                Text("H")
+                                    .font(.ibmPlexMono(size: 14))
+                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            }
 
-                        // Seconds
-                        VStack(spacing: 8) {
-                            Text("\(timeComponents.seconds)")
-                                .font(.joshFont(size: 72))
-                                .foregroundColor(.primaryBrand)
-                            Text("sec")
-                                .font(.ibmPlexMono(size: 18))
-                                .foregroundColor(.primaryBrand.opacity(0.7))
-                        }
+                            // Minutes
+                            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                Text(String(format: "%02d", timeComponents.minutes))
+                                    .font(.joshFont(size: 56))
+                                    .foregroundColor(.primaryBrand)
+                                Text("M")
+                                    .font(.ibmPlexMono(size: 14))
+                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            }
 
-                        // Date
-                        Text("free since \(formattedDate)")
-                            .font(.ibmPlexMono(size: 14, weight: .semibold))
-                            .foregroundColor(.primaryBrand.opacity(0.6))
-                            .padding(.top, 16)
+                            // Seconds
+                            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                                Text(String(format: "%02d", timeComponents.seconds))
+                                    .font(.joshFont(size: 56))
+                                    .foregroundColor(.primaryBrand)
+                                Text("S")
+                                    .font(.ibmPlexMono(size: 14))
+                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            }
+
+                            // Date
+                            Text("free since \(formattedDate)")
+                                .font(.ibmPlexMono(size: 14, weight: .semibold))
+                                .foregroundColor(.primaryBrand.opacity(0.6))
+                                .padding(.top, 16)
+                        }
+                        .padding(.leading, 20)
+
+                        Spacer()
                     }
 
                     Spacer()
@@ -114,7 +139,7 @@ struct MainView: View {
         .onAppear {
             // Update authorization status
             manager.updateAuthorizationStatus()
-            
+
             // Re-apply blocks if they were on when app closed
             if manager.isAuthorized && isBlocking {
                 manager.blockApps()

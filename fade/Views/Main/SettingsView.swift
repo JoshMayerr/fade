@@ -12,37 +12,48 @@ struct SettingsView: View {
         ("TikTok", "com.zhiliaoapp.musically"),
         ("Instagram", "com.burbn.instagram")
     ]
-    
+
     private var appVersion: String {
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             return version
         }
         return "1.0"
     }
-    
+
     var body: some View {
-        List {
-            Section("Blocked Apps") {
-                ForEach(blockedApps, id: \.1) { name, bundleId in
+        VStack(spacing: 0) {
+            List {
+                Section("Blocked Apps") {
+                    ForEach(blockedApps, id: \.1) { name, bundleId in
+                        HStack {
+                            Text(name)
+                            Spacer()
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                        }
+                    }
+                }
+
+                Section("About") {
                     HStack {
-                        Text(name)
+                        Text("Version")
                         Spacer()
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
+                        Text(appVersion)
+                            .foregroundColor(.secondary)
                     }
                 }
             }
-            
-            Section("About") {
-                HStack {
-                    Text("Version")
-                    Spacer()
-                    Text(appVersion)
-                        .foregroundColor(.secondary)
-                }
-            }
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .listRowSeparatorTint(.primaryBrand.opacity(0.2))
+            .background(Color.appBackground.ignoresSafeArea())
+
+            // Attribution text
+            Text("by josh mayer")
+                .font(.ibmPlexMono(size: 12))
+                .foregroundColor(.primaryBrand.opacity(0.5))
+                .padding(.bottom, 20)
         }
-        .scrollContentBackground(.hidden)
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)

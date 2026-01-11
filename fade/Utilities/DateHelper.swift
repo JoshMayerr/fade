@@ -10,6 +10,7 @@ import Foundation
 struct TimeComponents {
     let weeks: Int
     let days: Int
+    let hours: Int
     let minutes: Int
     let seconds: Int
 }
@@ -31,7 +32,7 @@ struct DateHelper {
         return formatter.string(from: date)
     }
     
-    /// Calculates weeks, days, minutes, and seconds elapsed since the given date
+    /// Calculates weeks, days, hours, minutes, and seconds elapsed since the given date
     /// - Parameters:
     ///   - date: The starting date
     ///   - referenceDate: Optional reference date (defaults to now)
@@ -40,16 +41,18 @@ struct DateHelper {
         let totalSeconds = Int(referenceDate.timeIntervalSince(date))
         
         guard totalSeconds >= 0 else {
-            return TimeComponents(weeks: 0, days: 0, minutes: 0, seconds: 0)
+            return TimeComponents(weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
         }
         
         let weeks = totalSeconds / (7 * 24 * 60 * 60)
         let remainingAfterWeeks = totalSeconds % (7 * 24 * 60 * 60)
         let days = remainingAfterWeeks / (24 * 60 * 60)
         let remainingAfterDays = remainingAfterWeeks % (24 * 60 * 60)
-        let minutes = remainingAfterDays / 60
-        let seconds = remainingAfterDays % 60
+        let hours = remainingAfterDays / (60 * 60)
+        let remainingAfterHours = remainingAfterDays % (60 * 60)
+        let minutes = remainingAfterHours / 60
+        let seconds = remainingAfterHours % 60
         
-        return TimeComponents(weeks: weeks, days: days, minutes: minutes, seconds: seconds)
+        return TimeComponents(weeks: weeks, days: days, hours: hours, minutes: minutes, seconds: seconds)
     }
 }
