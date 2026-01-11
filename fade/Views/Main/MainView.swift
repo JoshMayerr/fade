@@ -9,7 +9,9 @@ import SwiftUI
 import Combine
 
 struct MainView: View {
+    @StateObject private var manager = ScreenTimeManager.shared
     @AppStorage("firstBlockDate") private var firstBlockDate: Double = 0
+    @AppStorage("isBlocking") private var isBlocking = false
     @State private var currentTime = Date()
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -108,6 +110,15 @@ struct MainView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .onReceive(timer) { _ in
             currentTime = Date()
+        }
+        .onAppear {
+            // Update authorization status
+            manager.updateAuthorizationStatus()
+            
+            // Re-apply blocks if they were on when app closed
+            if manager.isAuthorized && isBlocking {
+                manager.blockApps()
+            }
         }
     }
 }
