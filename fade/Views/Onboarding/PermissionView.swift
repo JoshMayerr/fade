@@ -11,50 +11,51 @@ struct PermissionView: View {
     @ObservedObject var manager: ScreenTimeManager
     let onPermissionGranted: () -> Void
     let onPermissionDenied: () -> Void
-    
+
     @State private var isRequesting = false
-    
+
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 0) {
             Spacer()
-            
-            VStack(spacing: 20) {
-                Image(systemName: "lock.shield.fill")
-                    .font(.system(size: 64))
-                    .foregroundColor(.accentColor)
-                
-                Text("Screen Time Permission")
-                    .font(.title)
-                    .bold()
-                
+                .frame(height: 40)
+
+            // Header
+            Text("Screen Time Permission")
+                .font(.ibmPlexMono(size: 16, weight: .semibold))
+                .foregroundColor(.primaryBrand)
+
+            Spacer()
+                .frame(height: 30)
+
+            // Description text
+            VStack(spacing: 16) {
                 Text("fade needs Screen Time permission to block distracting apps. This permission is required for the app to function.")
-                    .font(.body)
-                    .foregroundColor(.secondary)
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                    .foregroundColor(.primaryBrand)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
-            
+
             Spacer()
-            
+                .frame(height: 60)
+
             if manager.isAuthorized {
-                VStack(spacing: 15) {
+                VStack(spacing: 16) {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
                         Text("Permission Granted")
-                            .font(.headline)
+                            .font(.ibmPlexMono(size: 16, weight: .semibold))
                             .foregroundColor(.green)
                     }
-                    
+
                     Button(action: onPermissionGranted) {
                         Text("Continue")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.accentColor)
-                            .cornerRadius(12)
+                            .font(.ibmPlexMono(size: 16, weight: .semibold))
                     }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .tint(Color.accentBrand)
                     .padding(.horizontal, 40)
                 }
             } else {
@@ -70,27 +71,20 @@ struct PermissionView: View {
                         }
                     }
                 }) {
-                    HStack {
-                        if isRequesting {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        } else {
-                            Text("Grant Permission")
-                                .font(.headline)
-                        }
+                    if isRequesting {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                    } else {
+                        Text("Grant Permission")
+                            .font(.ibmPlexMono(size: 16, weight: .semibold))
                     }
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentColor)
-                    .cornerRadius(12)
                 }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .tint(Color.accentBrand)
                 .padding(.horizontal, 40)
                 .disabled(isRequesting)
             }
-            
-            Spacer()
-                .frame(height: 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())

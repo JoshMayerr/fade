@@ -7,43 +7,58 @@
 
 import SwiftUI
 
+
 struct WelcomeView: View {
     let onContinue: () -> Void
 
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 0) {
             Spacer()
+                .frame(height: 40)
 
-            VStack(spacing: 20) {
-                Text("fade")
-                    .font(.joshFont(size: 64))
+            // Header: "welcome to" + logo
+            HStack(spacing: 8) {
+                Text("welcome to")
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
                     .foregroundColor(.primaryBrand)
 
-                Text("Break free from distraction")
-                    .font(.ibmPlexMono(size: 22))
-                    .foregroundColor(.primaryBrand.opacity(0.8))
-                    .multilineTextAlignment(.center)
+                Image("FadeLogo")
+                    .resizable()
+                    .renderingMode(.template)
+                    .foregroundColor(.accentBrand)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 50)
+            }
 
-                Text("Take control of your screen time by blocking distracting apps and tracking your progress.")
-                    .font(.ibmPlexMono(size: 16))
-                    .foregroundColor(.primaryBrand.opacity(0.7))
+            Spacer()
+                .frame(height: 30)
+
+            // Description text (custom text to be provided)
+            VStack(spacing: 16) {
+                Text("this app is supposed to do something important and you should try it yay")
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                    .foregroundColor(.primaryBrand)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+
+                Text("this app is supposed to do something important and you should try it yay")
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                    .foregroundColor(.primaryBrand)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
 
             Spacer()
+                .frame(height: 60)
 
+            // Button with native iOS styling
             Button(action: onContinue) {
-                Text("Get Started")
-                    .font(.ibmPlexMono(size: 18))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentBrand)
-                    .cornerRadius(12)
+                Text("Get Started").font(.ibmPlexMono(size: 16, weight: .semibold))
             }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(Color.accentBrand)
             .padding(.horizontal, 40)
-            .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())

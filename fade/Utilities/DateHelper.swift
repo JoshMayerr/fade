@@ -7,6 +7,13 @@
 
 import Foundation
 
+struct TimeComponents {
+    let weeks: Int
+    let days: Int
+    let minutes: Int
+    let seconds: Int
+}
+
 struct DateHelper {
     /// Calculates the number of days elapsed since the given date
     static func daysSince(date: Date) -> Int {
@@ -22,5 +29,27 @@ struct DateHelper {
         formatter.dateStyle = .long
         formatter.timeStyle = .none
         return formatter.string(from: date)
+    }
+    
+    /// Calculates weeks, days, minutes, and seconds elapsed since the given date
+    /// - Parameters:
+    ///   - date: The starting date
+    ///   - referenceDate: Optional reference date (defaults to now)
+    static func timeComponentsSince(date: Date, referenceDate: Date = Date()) -> TimeComponents {
+        // Calculate total time difference in seconds for accurate breakdown
+        let totalSeconds = Int(referenceDate.timeIntervalSince(date))
+        
+        guard totalSeconds >= 0 else {
+            return TimeComponents(weeks: 0, days: 0, minutes: 0, seconds: 0)
+        }
+        
+        let weeks = totalSeconds / (7 * 24 * 60 * 60)
+        let remainingAfterWeeks = totalSeconds % (7 * 24 * 60 * 60)
+        let days = remainingAfterWeeks / (24 * 60 * 60)
+        let remainingAfterDays = remainingAfterWeeks % (24 * 60 * 60)
+        let minutes = remainingAfterDays / 60
+        let seconds = remainingAfterDays % 60
+        
+        return TimeComponents(weeks: weeks, days: days, minutes: minutes, seconds: seconds)
     }
 }

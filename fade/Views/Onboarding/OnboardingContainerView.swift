@@ -43,9 +43,12 @@ struct OnboardingContainerView: View {
             )
             .tag(2)
         }
-        .tabViewStyle(.page)
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .background(Color.appBackground.ignoresSafeArea())
+        .overlay(alignment: .bottom) {
+            CustomPageIndicator(numberOfPages: 3, currentPage: currentStep)
+                .padding(.bottom, 20)
+        }
     }
 }
 

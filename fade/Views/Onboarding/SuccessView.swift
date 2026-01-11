@@ -10,43 +10,44 @@ import SwiftUI
 struct SuccessView: View {
     @ObservedObject var manager: ScreenTimeManager
     let onDone: () -> Void
-    
+
     @AppStorage("firstBlockDate") private var firstBlockDate: Double = 0
     @AppStorage("isBlocking") private var isBlocking = false
-    
+
     var body: some View {
-        VStack(spacing: 30) {
+        VStack(spacing: 0) {
             Spacer()
-            
-            VStack(spacing: 20) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 64))
-                    .foregroundColor(.green)
-                
-                Text("You're all set!")
-                    .font(.title)
-                    .bold()
-                
-                Text("TikTok and Instagram are now blocked. Your journey to better focus starts now.")
-                    .font(.body)
-                    .foregroundColor(.secondary)
+                .frame(height: 40)
+
+            // Header
+            Text("you're all set!")
+                .font(.ibmPlexMono(size: 16, weight: .semibold))
+                .foregroundColor(.primaryBrand)
+
+            Spacer()
+                .frame(height: 30)
+
+            // Description text
+            VStack(spacing: 16) {
+                Text("it's time! leave short form content behind.")
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                    .foregroundColor(.primaryBrand)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
-            
+
             Spacer()
-            
+                .frame(height: 60)
+
+            // Button with native iOS styling
             Button(action: onDone) {
                 Text("Done")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentColor)
-                    .cornerRadius(12)
+                    .font(.ibmPlexMono(size: 16, weight: .semibold))
             }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .tint(Color.accentBrand)
             .padding(.horizontal, 40)
-            .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())
@@ -54,7 +55,7 @@ struct SuccessView: View {
             // Auto-block apps and set first block date
             manager.blockApps()
             isBlocking = true
-            
+
             // Set first block date if not already set
             if firstBlockDate == 0 {
                 firstBlockDate = Date().timeIntervalSince1970
