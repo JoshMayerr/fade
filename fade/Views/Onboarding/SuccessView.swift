@@ -19,17 +19,23 @@ struct SuccessView: View {
             Spacer()
                 .frame(height: 40)
 
+            // check mark icon
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundColor(.accentBrand)
+                .font(.system(size: 30))
+
             // Header
-            Text("you're all set!")
-                .font(.ibmPlexMono(size: 16, weight: .semibold))
+            Text("done!")
+                .padding(.top, 10)
+                .font(.ibmPlexMono(size: 14, weight: .semibold))
                 .foregroundColor(.primaryBrand)
 
             Spacer()
                 .frame(height: 30)
 
             // Description text
-            VStack(spacing: 16) {
-                Text("it's time! leave short form content behind.")
+            VStack(spacing: 14) {
+                Text("tiktok and instagram are gone. seriously go look. they have disappeared.")
                     .font(.ibmPlexMono(size: 16, weight: .semibold))
                     .foregroundColor(.primaryBrand)
                     .multilineTextAlignment(.center)
@@ -41,7 +47,7 @@ struct SuccessView: View {
 
             // Button with native iOS styling
             Button(action: onDone) {
-                Text("Done")
+                Text("Continue")
                     .font(.ibmPlexMono(size: 16, weight: .semibold))
             }
             .buttonStyle(.borderedProminent)

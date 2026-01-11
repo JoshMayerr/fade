@@ -21,7 +21,7 @@ struct PermissionView: View {
 
             // Header
             Text("Screen Time Permission")
-                .font(.ibmPlexMono(size: 16, weight: .semibold))
+                .font(.ibmPlexMono(size: 14, weight: .semibold))
                 .foregroundColor(.primaryBrand)
 
             Spacer()
@@ -29,8 +29,8 @@ struct PermissionView: View {
 
             // Description text
             VStack(spacing: 16) {
-                Text("fade needs Screen Time permission to block distracting apps. This permission is required for the app to function.")
-                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                Text("ready to remove tiktok and instagram from your life? we just need to ask for permission to block them.")
+                    .font(.ibmPlexMono(size: 14, weight: .semibold))
                     .foregroundColor(.primaryBrand)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
@@ -38,6 +38,25 @@ struct PermissionView: View {
 
             Spacer()
                 .frame(height: 60)
+
+            // Dialog indicator rectangle
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.primaryBrand.opacity(0.3), lineWidth: 2)
+                .frame(width: 280, height: 200)
+                .overlay(
+                    VStack(spacing: 16) {
+                        Text("Dialog will appear here")
+                            .font(.ibmPlexMono(size: 12, weight: .regular))
+                            .foregroundColor(.primaryBrand.opacity(0.5))
+                        Image(systemName: "arrow.down")
+                            .foregroundColor(.primaryBrand.opacity(0.5))
+
+                    }
+                )
+                .padding(.bottom, 20)
+
+            Spacer()
+                .frame(height: 20)
 
             if manager.isAuthorized {
                 VStack(spacing: 16) {
