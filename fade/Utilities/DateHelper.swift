@@ -8,7 +8,8 @@
 import Foundation
 
 struct TimeComponents {
-    let weeks: Int
+    let years: Int
+    let months: Int
     let days: Int
     let hours: Int
     let minutes: Int
@@ -32,27 +33,32 @@ struct DateHelper {
         return formatter.string(from: date)
     }
     
-    /// Calculates weeks, days, hours, minutes, and seconds elapsed since the given date
+    /// Calculates years, months, days, hours, minutes, and seconds elapsed since the given date
     /// - Parameters:
     ///   - date: The starting date
     ///   - referenceDate: Optional reference date (defaults to now)
     static func timeComponentsSince(date: Date, referenceDate: Date = Date()) -> TimeComponents {
-        // Calculate total time difference in seconds for accurate breakdown
-        let totalSeconds = Int(referenceDate.timeIntervalSince(date))
+        let calendar = Calendar.current
+        let components = calendar.dateComponents(
+            [.year, .month, .day, .hour, .minute, .second],
+            from: date,
+            to: referenceDate
+        )
         
-        guard totalSeconds >= 0 else {
-            return TimeComponents(weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
-        }
+        let years = max(0, components.year ?? 0)
+        let months = max(0, components.month ?? 0)
+        let days = max(0, components.day ?? 0)
+        let hours = max(0, components.hour ?? 0)
+        let minutes = max(0, components.minute ?? 0)
+        let seconds = max(0, components.second ?? 0)
         
-        let weeks = totalSeconds / (7 * 24 * 60 * 60)
-        let remainingAfterWeeks = totalSeconds % (7 * 24 * 60 * 60)
-        let days = remainingAfterWeeks / (24 * 60 * 60)
-        let remainingAfterDays = remainingAfterWeeks % (24 * 60 * 60)
-        let hours = remainingAfterDays / (60 * 60)
-        let remainingAfterHours = remainingAfterDays % (60 * 60)
-        let minutes = remainingAfterHours / 60
-        let seconds = remainingAfterHours % 60
-        
-        return TimeComponents(weeks: weeks, days: days, hours: hours, minutes: minutes, seconds: seconds)
+        return TimeComponents(
+            years: years,
+            months: months,
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+        )
     }
 }

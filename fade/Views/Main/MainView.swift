@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import Combine
+
+// MARK: - Main View
 
 struct MainView: View {
     @StateObject private var manager = ScreenTimeManager.shared
@@ -19,7 +20,7 @@ struct MainView: View {
 
     private var timeComponents: TimeComponents {
         if firstBlockDate == 0 {
-            return TimeComponents(weeks: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
+            return TimeComponents(years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
         }
         let date = Date(timeIntervalSince1970: firstBlockDate)
         return DateHelper.timeComponentsSince(date: date, referenceDate: currentTime)
@@ -66,69 +67,31 @@ struct MainView: View {
 
                     Spacer()
 
-                    // Counter display
-                    HStack {
-                        VStack(alignment: .leading, spacing: 30) {
-                            // Weeks
-                            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                Text(String(format: "%02d", timeComponents.weeks))
-                                    .font(.joshFont(size: 56))
-                                    .foregroundColor(.primaryBrand)
-                                Text("W")
-                                    .font(.ibmPlexMono(size: 14))
-                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                    // Counter: 3×2 grid (3 rows, 2 columns)
+                    VStack(spacing: 20) {
+                        VStack(spacing: 16) {
+                            // Row 1: Y, M
+                            HStack(spacing: 10) {
+                                CounterCell(value: timeComponents.years, label: "Y")
+                                CounterCell(value: timeComponents.months, label: "M")
                             }
-
-                            // Days
-                            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                Text(String(format: "%02d", timeComponents.days))
-                                    .font(.joshFont(size: 56))
-                                    .foregroundColor(.primaryBrand)
-                                Text("D")
-                                    .font(.ibmPlexMono(size: 14))
-                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            // Row 2: D, H
+                            HStack(spacing: 16) {
+                                CounterCell(value: timeComponents.days, label: "D")
+                                CounterCell(value: timeComponents.hours, label: "H")
                             }
-
-                            // Hours
-                            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                Text(String(format: "%02d", timeComponents.hours))
-                                    .font(.joshFont(size: 56))
-                                    .foregroundColor(.primaryBrand)
-                                Text("H")
-                                    .font(.ibmPlexMono(size: 14))
-                                    .foregroundColor(.primaryBrand.opacity(0.7))
+                            // Row 3: M, S
+                            HStack(spacing: 16) {
+                                CounterCell(value: timeComponents.minutes, label: "M")
+                                CounterCell(value: timeComponents.seconds, label: "S")
                             }
-
-                            // Minutes
-                            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                Text(String(format: "%02d", timeComponents.minutes))
-                                    .font(.joshFont(size: 56))
-                                    .foregroundColor(.primaryBrand)
-                                Text("M")
-                                    .font(.ibmPlexMono(size: 14))
-                                    .foregroundColor(.primaryBrand.opacity(0.7))
-                            }
-
-                            // Seconds
-                            HStack(alignment: .firstTextBaseline, spacing: 8) {
-                                Text(String(format: "%02d", timeComponents.seconds))
-                                    .font(.joshFont(size: 56))
-                                    .foregroundColor(.primaryBrand)
-                                Text("S")
-                                    .font(.ibmPlexMono(size: 14))
-                                    .foregroundColor(.primaryBrand.opacity(0.7))
-                            }
-
-                            // Date
-                            Text("free since \(formattedDate)")
-                                .font(.ibmPlexMono(size: 14, weight: .semibold))
-                                .foregroundColor(.primaryBrand.opacity(0.6))
-                                .padding(.top, 16)
                         }
-                        .padding(.leading, 20)
 
-                        Spacer()
+                        Text("free since \(formattedDate)")
+                            .font(.ibmPlexMono(size: 12, weight: .medium))
+                            .foregroundColor(.primaryBrand.opacity(0.6))
                     }
+                    .padding(.horizontal, 20)
 
                     Spacer()
                 }
@@ -142,26 +105,41 @@ struct MainView: View {
             currentTime = Date()
         }
         .onAppear {
-            // Update authorization status
             manager.updateAuthorizationStatus()
 
-            // Re-apply blocks if they were on when app closed
             if manager.isAuthorized && isBlocking {
                 manager.blockApps()
             }
-            
-            // Show success modal if flag is set
+
             if shouldShowSuccessModal {
                 showSuccessModal = true
                 shouldShowSuccessModal = false
             }
         }
         .onChange(of: showSuccessModal) { newValue in
-            // Clear the flag when modal is dismissed
             if !newValue {
                 shouldShowSuccessModal = false
             }
         }
+    }
+}
+
+// MARK: - Counter cell (two digits + label)
+
+private struct CounterCell: View {
+    let value: Int
+    let label: String
+
+    var body: some View {
+        VStack(alignment: .center, spacing: 4) {
+            Text(String(format: "%02d", value))
+                .font(.joshThick(size: 48))
+                .foregroundColor(.primaryBrand)
+            Text(label)
+                .font(.ibmPlexMono(size: 12))
+                .foregroundColor(.primaryBrand.opacity(0.7))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
