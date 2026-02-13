@@ -67,8 +67,8 @@ struct HoloCardView<Content: View>: View {
             content
                 .padding(24)
         }
-        .frame(maxWidth: .infinity)
-        .frame(height: 280)
+        .frame(maxWidth: 340)
+        .frame(height: 320)
         .rotation3DEffect(.degrees(motion.tiltX), axis: (x: 1, y: 0, z: 0))
         .rotation3DEffect(.degrees(motion.tiltY), axis: (x: 0, y: 1, z: 0))
         .shadow(color: Color.black.opacity(0.18), radius: 22, x: 0, y: 14)

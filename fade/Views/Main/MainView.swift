@@ -70,25 +70,25 @@ struct MainView: View {
                     // Counter: 3×2 grid (3 rows, 2 columns)
                     VStack(spacing: 20) {
                         HoloCardView {
-                            VStack(spacing: 16) {
+                            VStack(spacing: 24) {
                                 // Row 1: Y, M
-                                HStack(spacing: 10) {
+                                HStack(spacing: 20) {
                                     CounterCell(value: timeComponents.years, label: "Y")
                                     CounterCell(value: timeComponents.months, label: "M")
                                 }
                                 // Row 2: D, H
-                                HStack(spacing: 16) {
+                                HStack(spacing: 20) {
                                     CounterCell(value: timeComponents.days, label: "D")
                                     CounterCell(value: timeComponents.hours, label: "H")
                                 }
                                 // Row 3: M, S
-                                HStack(spacing: 16) {
+                                HStack(spacing: 20) {
                                     CounterCell(value: timeComponents.minutes, label: "M")
                                     CounterCell(value: timeComponents.seconds, label: "S")
                                 }
                             }
                         }
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 32)
 
                         Text("free since \(formattedDate)")
                             .font(.ibmPlexMono(size: 12, weight: .medium))
