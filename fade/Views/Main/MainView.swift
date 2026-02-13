@@ -69,29 +69,31 @@ struct MainView: View {
 
                     // Counter: 3×2 grid (3 rows, 2 columns)
                     VStack(spacing: 20) {
-                        VStack(spacing: 16) {
-                            // Row 1: Y, M
-                            HStack(spacing: 10) {
-                                CounterCell(value: timeComponents.years, label: "Y")
-                                CounterCell(value: timeComponents.months, label: "M")
-                            }
-                            // Row 2: D, H
-                            HStack(spacing: 16) {
-                                CounterCell(value: timeComponents.days, label: "D")
-                                CounterCell(value: timeComponents.hours, label: "H")
-                            }
-                            // Row 3: M, S
-                            HStack(spacing: 16) {
-                                CounterCell(value: timeComponents.minutes, label: "M")
-                                CounterCell(value: timeComponents.seconds, label: "S")
+                        HoloCardView {
+                            VStack(spacing: 16) {
+                                // Row 1: Y, M
+                                HStack(spacing: 10) {
+                                    CounterCell(value: timeComponents.years, label: "Y")
+                                    CounterCell(value: timeComponents.months, label: "M")
+                                }
+                                // Row 2: D, H
+                                HStack(spacing: 16) {
+                                    CounterCell(value: timeComponents.days, label: "D")
+                                    CounterCell(value: timeComponents.hours, label: "H")
+                                }
+                                // Row 3: M, S
+                                HStack(spacing: 16) {
+                                    CounterCell(value: timeComponents.minutes, label: "M")
+                                    CounterCell(value: timeComponents.seconds, label: "S")
+                                }
                             }
                         }
+                        .padding(.horizontal, 20)
 
                         Text("free since \(formattedDate)")
                             .font(.ibmPlexMono(size: 12, weight: .medium))
                             .foregroundColor(.textSubtle)
                     }
-                    .padding(.horizontal, 20)
 
                     Spacer()
                 }
@@ -134,7 +136,7 @@ private struct CounterCell: View {
         VStack(alignment: .center, spacing: 4) {
             Text(String(format: "%02d", value))
                 .font(.joshThick(size: 48))
-                .foregroundColor(.primaryBrand)
+                .foregroundColor(.primaryBrand.opacity(0.9))
             Text(label)
                 .font(.ibmPlexMono(size: 12))
                 .foregroundColor(.textSecondary)

@@ -17,7 +17,7 @@ enum AppPalette {
     static let textSubtle = primary.opacity(0.6)
     static let textMuted = primary.opacity(0.5)
 
-    static let surface = Color.white.opacity(0.75)
+    static let surface = Color.white
     static let surfaceStrong = Color.white
 
     static let borderSubtle = primary.opacity(0.3)
