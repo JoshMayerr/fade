@@ -9,10 +9,20 @@ import SwiftUI
 
 struct HoloCardView<Content: View>: View {
     @StateObject private var motion = MotionManager()
+    @State private var touchTiltX: Double = 0
+    @State private var touchTiltY: Double = 0
     private let content: Content
 
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
+    }
+
+    private var combinedTiltX: Double {
+        clamp(motion.tiltX + touchTiltX, min: -12, max: 12)
+    }
+
+    private var combinedTiltY: Double {
+        clamp(motion.tiltY + touchTiltY, min: -12, max: 12)
     }
 
     var body: some View {
@@ -43,7 +53,7 @@ struct HoloCardView<Content: View>: View {
                     )
                 )
                 .blendMode(.screen)
-                .opacity(0.35)
+                .opacity(0.45)
 
             RoundedRectangle(cornerRadius: 28, style: .continuous)
                 .fill(
@@ -54,8 +64,8 @@ struct HoloCardView<Content: View>: View {
                             Color.clear
                         ],
                         center: UnitPoint(
-                            x: Self.clamp01(0.5 + (motion.tiltY / 20.0)),
-                            y: Self.clamp01(0.5 + (motion.tiltX / 20.0))
+                            x: Self.clamp01(0.5 + (combinedTiltY / 20.0)),
+                            y: Self.clamp01(0.5 + (combinedTiltX / 20.0))
                         ),
                         startRadius: 0,
                         endRadius: 220
@@ -69,9 +79,24 @@ struct HoloCardView<Content: View>: View {
         }
         .frame(maxWidth: 340)
         .frame(height: 320)
-        .rotation3DEffect(.degrees(motion.tiltX), axis: (x: 1, y: 0, z: 0))
-        .rotation3DEffect(.degrees(motion.tiltY), axis: (x: 0, y: 1, z: 0))
+        .rotation3DEffect(.degrees(combinedTiltX), axis: (x: 1, y: 0, z: 0))
+        .rotation3DEffect(.degrees(combinedTiltY), axis: (x: 0, y: 1, z: 0))
         .shadow(color: Color.black.opacity(0.18), radius: 22, x: 0, y: 14)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { value in
+                    let x = (value.location.x - 170) / 170
+                    let y = (value.location.y - 160) / 160
+                    touchTiltY = clamp(Double(x) * 8, min: -8, max: 8)
+                    touchTiltX = clamp(Double(-y) * 8, min: -8, max: 8)
+                }
+                .onEnded { _ in
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        touchTiltX = 0
+                        touchTiltY = 0
+                    }
+                }
+        )
         .onAppear {
             motion.start()
         }
@@ -82,5 +107,9 @@ struct HoloCardView<Content: View>: View {
 
     private static func clamp01(_ value: Double) -> Double {
         Swift.min(Swift.max(value, 0.0), 1.0)
+    }
+
+    private func clamp(_ value: Double, min minValue: Double, max maxValue: Double) -> Double {
+        Swift.min(Swift.max(value, minValue), maxValue)
     }
 }
