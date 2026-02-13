@@ -15,7 +15,7 @@ struct CustomPageIndicator: View {
         HStack(spacing: 8) {
             ForEach(0..<numberOfPages, id: \.self) { index in
                 Circle()
-                    .fill(index == currentPage ? Color.accentBrand : Color.primaryBrand.opacity(0.3))
+                    .fill(index == currentPage ? Color.accentBrand : Color.borderSubtle)
                     .frame(width: index == currentPage ? 8 : 6, height: index == currentPage ? 8 : 6)
                     .animation(.easeInOut(duration: 0.2), value: currentPage)
             }

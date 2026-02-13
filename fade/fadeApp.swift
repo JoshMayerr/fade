@@ -6,12 +6,19 @@
 //
 
 import SwiftUI
+import UIKit
 
 @main
 struct fadeApp: App {
+    init() {
+        UIView.appearance().overrideUserInterfaceStyle = .light
+    }
+
     var body: some Scene {
         WindowGroup {
             AppRootView()
+                .preferredColorScheme(.light)
+                .tint(.accentBrand)
         }
     }
 }

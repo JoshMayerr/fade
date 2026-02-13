@@ -41,15 +41,15 @@ struct PermissionView: View {
 
             // Dialog indicator rectangle
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.primaryBrand.opacity(0.3), lineWidth: 2)
+                .stroke(Color.borderSubtle, lineWidth: 2)
                 .frame(width: 280, height: 200)
                 .overlay(
                     VStack(spacing: 16) {
                         Text("Dialog will appear here")
                             .font(.ibmPlexMono(size: 12, weight: .regular))
-                            .foregroundColor(.primaryBrand.opacity(0.5))
+                            .foregroundColor(.textMuted)
                         Image(systemName: "arrow.down")
-                            .foregroundColor(.primaryBrand.opacity(0.5))
+                            .foregroundColor(.textMuted)
 
                     }
                 )
@@ -62,10 +62,10 @@ struct PermissionView: View {
                 VStack(spacing: 16) {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.green)
+                            .foregroundColor(.success)
                         Text("Permission Granted")
                             .font(.ibmPlexMono(size: 16, weight: .semibold))
-                            .foregroundColor(.green)
+                            .foregroundColor(.success)
                     }
 
                     Button(action: onPermissionGranted) {
@@ -92,7 +92,7 @@ struct PermissionView: View {
                 }) {
                     if isRequesting {
                         ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .progressViewStyle(CircularProgressViewStyle(tint: .onAccent))
                     } else {
                         Text("Grant Permission")
                             .font(.ibmPlexMono(size: 16, weight: .semibold))

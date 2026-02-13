@@ -58,7 +58,7 @@ struct MainView: View {
                                 .font(.system(size: 20, weight: .medium))
                                 .foregroundColor(.primaryBrand)
                                 .frame(width: 44, height: 44)
-                                .background(.ultraThinMaterial)
+                                .background(Color.surface)
                                 .clipShape(Circle())
                         }
                         .padding(.trailing, 20)
@@ -89,7 +89,7 @@ struct MainView: View {
 
                         Text("free since \(formattedDate)")
                             .font(.ibmPlexMono(size: 12, weight: .medium))
-                            .foregroundColor(.primaryBrand.opacity(0.6))
+                            .foregroundColor(.textSubtle)
                     }
                     .padding(.horizontal, 20)
 
@@ -137,7 +137,7 @@ private struct CounterCell: View {
                 .foregroundColor(.primaryBrand)
             Text(label)
                 .font(.ibmPlexMono(size: 12))
-                .foregroundColor(.primaryBrand.opacity(0.7))
+                .foregroundColor(.textSecondary)
         }
         .frame(maxWidth: .infinity)
     }

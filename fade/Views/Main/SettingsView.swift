@@ -29,7 +29,7 @@ struct SettingsView: View {
                             Text(name)
                             Spacer()
                             Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.green)
+                                .foregroundColor(.success)
                         }
                     }
                 }
@@ -39,19 +39,19 @@ struct SettingsView: View {
                         Text("Version")
                         Spacer()
                         Text(appVersion)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.textSecondary)
                     }
                 }
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
-            .listRowSeparatorTint(.primaryBrand.opacity(0.2))
+            .listRowSeparatorTint(.borderHairline)
             .background(Color.appBackground.ignoresSafeArea())
 
             // Attribution text
             Text("by josh mayer")
                 .font(.ibmPlexMono(size: 12))
-                .foregroundColor(.primaryBrand.opacity(0.5))
+                .foregroundColor(.textMuted)
                 .padding(.bottom, 20)
         }
         .background(Color.appBackground.ignoresSafeArea())

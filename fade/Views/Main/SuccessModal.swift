@@ -58,7 +58,7 @@ struct SuccessModal: View {
                             .font(.system(size: 16, weight: .medium))
                             .foregroundColor(.primaryBrand)
                             .frame(width: 32, height: 32)
-                            .background(.ultraThinMaterial)
+                            .background(Color.surface)
                             .clipShape(Circle())
                     }
                     .padding(.trailing, 20)

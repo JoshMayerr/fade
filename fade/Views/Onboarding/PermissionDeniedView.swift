@@ -17,7 +17,7 @@ struct PermissionDeniedView: View {
             VStack(spacing: 20) {
                 Image(systemName: "exclamationmark.triangle.fill")
                     .font(.system(size: 64))
-                    .foregroundColor(.orange)
+                    .foregroundColor(.warning)
                 
                 Text("Permission Required")
                     .font(.title)
@@ -25,7 +25,7 @@ struct PermissionDeniedView: View {
                 
                 Text("fade cannot function without Screen Time permission. Please grant permission in Settings to continue.")
                     .font(.body)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.textSecondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 40)
             }
@@ -35,10 +35,10 @@ struct PermissionDeniedView: View {
             Button(action: onRetry) {
                 Text("Try Again")
                     .font(.headline)
-                    .foregroundColor(.white)
+                    .foregroundColor(.onAccent)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.accentColor)
+                    .background(Color.accentBrand)
                     .cornerRadius(12)
             }
             .padding(.horizontal, 40)
