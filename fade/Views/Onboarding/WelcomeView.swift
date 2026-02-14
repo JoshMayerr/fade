@@ -10,64 +10,54 @@ import SwiftUI
 
 struct WelcomeView: View {
     let onContinue: () -> Void
+    @State private var isAnimating = false
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-                .frame(height: 40)
 
-            // Header: "welcome to" + logo
-            HStack(spacing: 8) {
-                Text("welcome to")
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-
-                Image("FadeLogo")
-                    .resizable()
-                    .renderingMode(.template)
-                    .foregroundColor(.accentBrand)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(height: 50)
-            }
+            Image("FadeHero")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, -56)
 
             Spacer()
-                .frame(height: 30)
+                .frame(height: 28)
 
-            // Description text (custom text to be provided)
-            VStack(spacing: 14) {
-                Text("""
-                short form content is really bad. you know that, so this is the chance to remove it from your brain.
-                """)
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-
-                Text("""
-                give it a try!
-                """)
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
-
-            }
+            Text("how long can you go\nwithout doomscrolling?")
+                .font(.ibmPlexMono(size: 14, weight: .bold))
+                .foregroundColor(.primaryBrand)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 40)
+                .opacity(isAnimating ? 1 : 0)
 
             Spacer()
-                .frame(height: 60)
-
+        }
+        .safeAreaInset(edge: .bottom) {
             // Button with native iOS styling
             Button(action: onContinue) {
-                Text("Get Started").font(.ibmPlexMono(size: 16, weight: .semibold))
+                Text("Get Started")
+                    .font(.ibmPlexMono(size: 16, weight: .bold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 6)
             }
             .buttonStyle(.borderedProminent)
+            //vertical space inside the button
             .controlSize(.large)
             .tint(Color.accentBrand)
-            .padding(.horizontal, 40)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 20)
+            .opacity(isAnimating ? 1 : 0)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())
+        .onAppear {
+            withAnimation(.easeOut(duration: 0.8)) {
+                isAnimating = true
+            }
+        }
     }
 }
 

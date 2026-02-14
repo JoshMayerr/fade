@@ -37,11 +37,6 @@ struct OnboardingContainerView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .background(Color.appBackground.ignoresSafeArea())
-        .overlay(alignment: .bottom) {
-            // Page indicator for WelcomeView and PermissionView
-            CustomPageIndicator(numberOfPages: 2, currentPage: currentStep)
-                .padding(.bottom, 20)
-        }
     }
 }
 

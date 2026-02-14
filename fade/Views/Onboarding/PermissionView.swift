@@ -16,67 +16,50 @@ struct PermissionView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Spacer()
-                .frame(height: 40)
-
-            // Header
-            Text("Screen Time Permission")
-                .font(.ibmPlexMono(size: 14, weight: .semibold))
+            Text("Quick\npermission\nplease")
+                .font(.joshThick(size: 52))
                 .foregroundColor(.primaryBrand)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
 
             Spacer()
-                .frame(height: 30)
+                .frame(height: 10)
 
-            // Description text
-            VStack(spacing: 16) {
-                Text("ready to remove tiktok and instagram from your life? we just need to ask for permission to block them.")
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
-                    .foregroundColor(.primaryBrand)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+            Text("To make this work, you need to approve the screen time dialog.")
+                .font(.ibmPlexMono(size: 16, weight: .semibold))
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 24)
+
+            Spacer()
+                .frame(height: 100)
+
+            VStack(spacing: 12) {
+                Text("1. click approve")
+                Text("2. click continue")
             }
+            .font(.joshThick(size: 36))
+            .foregroundColor(.textMuted)
+            .multilineTextAlignment(.center)
 
             Spacer()
-                .frame(height: 60)
-
-            // Dialog indicator rectangle
-            RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.borderSubtle, lineWidth: 2)
-                .frame(width: 280, height: 200)
-                .overlay(
-                    VStack(spacing: 16) {
-                        Text("Dialog will appear here")
-                            .font(.ibmPlexMono(size: 12, weight: .regular))
-                            .foregroundColor(.textMuted)
-                        Image(systemName: "arrow.down")
-                            .foregroundColor(.textMuted)
-
-                    }
-                )
-                .padding(.bottom, 20)
-
-            Spacer()
-                .frame(height: 20)
-
+        }
+        .safeAreaInset(edge: .bottom) {
             if manager.isAuthorized {
-                VStack(spacing: 16) {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundColor(.success)
-                        Text("Permission Granted")
-                            .font(.ibmPlexMono(size: 16, weight: .semibold))
-                            .foregroundColor(.success)
-                    }
-
-                    Button(action: onPermissionGranted) {
-                        Text("Continue")
-                            .font(.ibmPlexMono(size: 16, weight: .semibold))
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .controlSize(.large)
-                    .tint(Color.accentBrand)
-                    .padding(.horizontal, 40)
+                Button(action: onPermissionGranted) {
+                    Text("Continue")
+                        .font(.ibmPlexMono(size: 16, weight: .bold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
                 }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .tint(Color.accentBrand)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 20)
             } else {
                 Button(action: {
                     isRequesting = true
@@ -94,14 +77,18 @@ struct PermissionView: View {
                         ProgressView()
                             .progressViewStyle(CircularProgressViewStyle(tint: .onAccent))
                     } else {
-                        Text("Grant Permission")
-                            .font(.ibmPlexMono(size: 16, weight: .semibold))
+                        Text("Approve")
+                            .font(.ibmPlexMono(size: 16, weight: .bold))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 6)
                     }
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .tint(Color.accentBrand)
-                .padding(.horizontal, 40)
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 24)
+                .padding(.bottom, 20)
                 .disabled(isRequesting)
             }
         }
