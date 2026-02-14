@@ -11,6 +11,8 @@ struct SettingsView: View {
     @ObservedObject private var blockedAppStore = BlockedAppStore.shared
     @StateObject private var manager = ScreenTimeManager.shared
     @AppStorage("isBlocking") private var isBlocking = false
+    @State private var pendingAddApp: BlockableApp?
+    @State private var isConfirmingAdd = false
 
     private var appVersion: String {
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -26,16 +28,21 @@ struct SettingsView: View {
                     ForEach(BlockedAppCatalog.catalog) { app in
                         Toggle(isOn: Binding(
                             get: { blockedAppStore.isSelected(app.bundleId) },
-                            set: { blockedAppStore.setSelected(app.bundleId, isSelected: $0) }
+                            set: { isSelected in
+                                if isSelected {
+                                    pendingAddApp = app
+                                    isConfirmingAdd = true
+                                }
+                            }
                         )) {
                             Text(app.name)
                         }
-                        .disabled(!blockedAppStore.canDeselect(app.bundleId))
+                        .disabled(blockedAppStore.isSelected(app.bundleId))
                     }
                 } header: {
                     Text("Blocked Apps")
                 } footer: {
-                    Text("Pick at least one app to block.")
+                    Text("You can only add more apps here.")
                         .foregroundColor(.textMuted)
                 }
 
@@ -66,6 +73,17 @@ struct SettingsView: View {
             if isBlocking {
                 manager.blockApps()
             }
+        }
+        .alert("Add to blocked apps?", isPresented: $isConfirmingAdd, presenting: pendingAddApp) { app in
+            Button("Add") {
+                blockedAppStore.setSelected(app.bundleId, isSelected: true)
+                pendingAddApp = nil
+            }
+            Button("Cancel", role: .cancel) {
+                pendingAddApp = nil
+            }
+        } message: { app in
+            Text("\(app.name) will be blocked from now on. You can't remove it later.")
         }
     }
 }

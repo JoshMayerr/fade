@@ -45,7 +45,6 @@ struct MainView: View {
                         Image("FadeLogo")
                             .resizable()
                             .renderingMode(.template)
-                            .foregroundColor(.accentBrand)
                             .aspectRatio(contentMode: .fit)
                             .frame(height: 40)
                             .padding(.leading, 20)

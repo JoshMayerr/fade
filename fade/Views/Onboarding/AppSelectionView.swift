@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AppSelectionView: View {
     let onContinue: () -> Void
-    @ObservedObject private var blockedAppStore = BlockedAppStore.shared
+    @State private var stagedSelection: Set<String> = BlockedAppCatalog.defaultSelection
 
     var body: some View {
         VStack(spacing: 0) {
@@ -37,12 +37,17 @@ struct AppSelectionView: View {
                 Section {
                     ForEach(BlockedAppCatalog.catalog) { app in
                         Toggle(isOn: Binding(
-                            get: { blockedAppStore.isSelected(app.bundleId) },
-                            set: { blockedAppStore.setSelected(app.bundleId, isSelected: $0) }
+                            get: { stagedSelection.contains(app.bundleId) },
+                            set: { isSelected in
+                                if isSelected {
+                                    stagedSelection.insert(app.bundleId)
+                                } else {
+                                    stagedSelection.remove(app.bundleId)
+                                }
+                            }
                         )) {
                             Text(app.name)
                         }
-                        .disabled(!blockedAppStore.canDeselect(app.bundleId))
                     }
                 } header: {
                     Text("Blocked Apps")
@@ -59,7 +64,10 @@ struct AppSelectionView: View {
             Spacer()
         }
         .safeAreaInset(edge: .bottom) {
-            Button(action: onContinue) {
+            Button(action: {
+                BlockedAppStore.shared.setSelection(stagedSelection)
+                onContinue()
+            }) {
                 Text("Continue")
                     .font(.ibmPlexMono(size: 16, weight: .bold))
                     .frame(maxWidth: .infinity)
@@ -71,10 +79,13 @@ struct AppSelectionView: View {
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 24)
             .padding(.bottom, 20)
-            .disabled(blockedAppStore.selection.isEmpty)
+            .disabled(stagedSelection.isEmpty)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())
+        .onAppear {
+            stagedSelection = BlockedAppStore.shared.selection
+        }
     }
 }
 

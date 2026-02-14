@@ -34,19 +34,17 @@ final class BlockedAppStore: ObservableObject {
         selection.contains(bundleId)
     }
 
-    func canDeselect(_ bundleId: String) -> Bool {
-        selection.count > 1 || !selection.contains(bundleId)
+    func setSelected(_ bundleId: String, isSelected: Bool) {
+        guard isSelected else { return }
+        var next = selection
+        next.insert(bundleId)
+        updateSelection(next)
     }
 
-    func setSelected(_ bundleId: String, isSelected: Bool) {
-        var next = selection
-        if isSelected {
-            next.insert(bundleId)
-        } else {
-            guard next.count > 1 else { return }
-            next.remove(bundleId)
-        }
-        updateSelection(next)
+    func setSelection(_ next: Set<String>) {
+        let filtered = next.intersection(BlockedAppCatalog.catalogBundleIds)
+        let committed = filtered.isEmpty ? BlockedAppCatalog.defaultSelection : filtered
+        updateSelection(committed)
     }
 
     private func updateSelection(_ next: Set<String>) {
