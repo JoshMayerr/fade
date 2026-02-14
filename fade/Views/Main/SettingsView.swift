@@ -14,6 +14,17 @@ struct SettingsView: View {
     @State private var pendingAddApp: BlockableApp?
     @State private var isConfirmingAdd = false
 
+    private func iconName(for app: BlockableApp) -> String? {
+        switch app.bundleId {
+        case "com.zhiliaoapp.musically":
+            return "tiktok"
+        case "com.burbn.instagram":
+            return "ig"
+        default:
+            return nil
+        }
+    }
+
     private var appVersion: String {
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
             return version
@@ -23,41 +34,99 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            List {
-                Section {
-                    ForEach(BlockedAppCatalog.catalog) { app in
-                        Toggle(isOn: Binding(
-                            get: { blockedAppStore.isSelected(app.bundleId) },
-                            set: { isSelected in
-                                if isSelected {
-                                    pendingAddApp = app
-                                    isConfirmingAdd = true
-                                }
-                            }
-                        )) {
-                            Text(app.name)
-                        }
-                        .disabled(blockedAppStore.isSelected(app.bundleId))
-                    }
-                } header: {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
                     Text("Blocked Apps")
-                } footer: {
-                    Text("You can only add more apps here.")
-                        .foregroundColor(.textMuted)
-                }
+                        .font(.ibmPlexMono(size: 14, weight: .semibold))
+                        .foregroundColor(.textSecondary)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 8)
 
-                Section("About") {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text(appVersion)
-                            .foregroundColor(.textSecondary)
+                    VStack(spacing: 20) {
+                        ForEach(BlockedAppCatalog.catalog) { app in
+                            let isSelected = blockedAppStore.isSelected(app.bundleId)
+
+                            Button {
+                                pendingAddApp = app
+                                isConfirmingAdd = true
+                            } label: {
+                            HStack(spacing: 12) {
+                                if let iconName = iconName(for: app) {
+                                    Image(iconName)
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
+                                }
+
+                                Text(app.name)
+                                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                                    .foregroundColor(.textPrimary)
+
+                                    Spacer()
+
+                                    if isSelected {
+                                        Image("lock")
+                                            .resizable()
+                                            .renderingMode(.template)
+                                            .frame(width: 14, height: 14)
+                                            .foregroundColor(.accentBrand)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 20)
+                                .background(Color.surface)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .stroke(isSelected ? Color.accentBrand.opacity(0.35) : Color.borderHairline, lineWidth: 3)
+                                )
+                                .cornerRadius(14)
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            .disabled(isSelected)
+                            .transaction { $0.animation = nil }
+                        }
                     }
+                    .padding(.horizontal, 24)
+
+                    Text("You can only add more apps here.")
+                        .font(.ibmPlexMono(size: 12, weight: .medium))
+                        .foregroundColor(.textMuted)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 4)
+
+                    Spacer()
+                        .frame(height: 12)
+
+                    Text("About")
+                        .font(.ibmPlexMono(size: 14, weight: .semibold))
+                        .foregroundColor(.textSecondary)
+                        .padding(.horizontal, 24)
+
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text("Version")
+                                .font(.ibmPlexMono(size: 16, weight: .semibold))
+                                .foregroundColor(.textPrimary)
+                            Spacer()
+                            Text(appVersion)
+                                .font(.ibmPlexMono(size: 14, weight: .medium))
+                                .foregroundColor(.textSecondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 20)
+                        .background(Color.surface)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(Color.borderHairline, lineWidth: 3)
+                        )
+                        .cornerRadius(14)
+                    }
+                    .padding(.horizontal, 24)
                 }
+                .padding(.vertical, 12)
             }
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .listRowSeparatorTint(.borderHairline)
             .background(Color.appBackground.ignoresSafeArea())
 
             // Attribution text

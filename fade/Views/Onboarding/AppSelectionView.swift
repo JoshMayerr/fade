@@ -12,6 +12,17 @@ struct AppSelectionView: View {
     @State private var stagedSelection: Set<String>
     @StateObject private var store = BlockedAppStore.shared
 
+    private func iconName(for app: BlockableApp) -> String? {
+        switch app.bundleId {
+        case "com.zhiliaoapp.musically":
+            return "tiktok"
+        case "com.burbn.instagram":
+            return "ig"
+        default:
+            return nil
+        }
+    }
+
     init(onContinue: @escaping () -> Void) {
         self.onContinue = onContinue
         _stagedSelection = State(initialValue: BlockedAppStore.shared.selection)
@@ -52,7 +63,13 @@ struct AppSelectionView: View {
                                     stagedSelection.insert(app.bundleId)
                                 }
                             }) {
-                                HStack(spacing: 24) {
+                                HStack(spacing: 12) {
+                                    if let iconName = iconName(for: app) {
+                                        Image(iconName)
+                                            .resizable()
+                                            .frame(width: 16, height: 16)
+                                    }
+
                                     Text(app.name)
                                         .font(.ibmPlexMono(size: 16, weight: .semibold))
                                         .foregroundColor(.textPrimary)
@@ -60,8 +77,10 @@ struct AppSelectionView: View {
                                     Spacer()
 
                                     if isSelected {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 14, weight: .bold))
+                                        Image("lock")
+                                            .resizable()
+                                            .renderingMode(.template)
+                                            .frame(width: 14, height: 14)
                                             .foregroundColor(.accentBrand)
                                     }
                                 }
