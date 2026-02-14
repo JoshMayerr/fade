@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct SettingsView: View {
-    private let blockedApps = [
-        ("TikTok", "com.zhiliaoapp.musically"),
-        ("Instagram", "com.burbn.instagram")
-    ]
+    @ObservedObject private var blockedAppStore = BlockedAppStore.shared
+    @StateObject private var manager = ScreenTimeManager.shared
+    @AppStorage("isBlocking") private var isBlocking = false
 
     private var appVersion: String {
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -23,15 +22,21 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 0) {
             List {
-                Section("Blocked Apps") {
-                    ForEach(blockedApps, id: \.1) { name, bundleId in
-                        HStack {
-                            Text(name)
-                            Spacer()
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.success)
+                Section {
+                    ForEach(BlockedAppCatalog.catalog) { app in
+                        Toggle(isOn: Binding(
+                            get: { blockedAppStore.isSelected(app.bundleId) },
+                            set: { blockedAppStore.setSelected(app.bundleId, isSelected: $0) }
+                        )) {
+                            Text(app.name)
                         }
+                        .disabled(!blockedAppStore.canDeselect(app.bundleId))
                     }
+                } header: {
+                    Text("Blocked Apps")
+                } footer: {
+                    Text("Pick at least one app to block.")
+                        .foregroundColor(.textMuted)
                 }
 
                 Section("About") {
@@ -57,6 +62,11 @@ struct SettingsView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .onChange(of: blockedAppStore.selection) { _ in
+            if isBlocking {
+                manager.blockApps()
+            }
+        }
     }
 }
 

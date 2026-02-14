@@ -36,7 +36,7 @@ struct SuccessModal: View {
 
                 // Description text
                 VStack(spacing: 14) {
-                    Text("tiktok and instagram are gone. seriously go look. they have disappeared!")
+                    Text("your selected apps are gone. seriously go look. they have disappeared!")
                         .font(.ibmPlexMono(size: 14, weight: .semibold))
                         .foregroundColor(.primaryBrand)
                         .multilineTextAlignment(.center)

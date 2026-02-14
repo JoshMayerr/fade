@@ -22,7 +22,14 @@ struct OnboardingContainerView: View {
                 }
             })
             .tag(0)
-            
+
+            AppSelectionView(onContinue: {
+                withAnimation {
+                    currentStep = 2
+                }
+            })
+            .tag(1)
+
             PermissionView(
                 manager: manager,
                 onPermissionGranted: {
@@ -33,7 +40,7 @@ struct OnboardingContainerView: View {
                     // Permission denied - PermissionView handles UI state
                 }
             )
-            .tag(1)
+            .tag(2)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
         .background(Color.appBackground.ignoresSafeArea())

@@ -30,10 +30,9 @@ class ScreenTimeManager: ObservableObject {
     }
 
     func blockApps() {
-        let blockedApps: Set<Application> = [
-            Application(bundleIdentifier: "com.zhiliaoapp.musically"),  // TikTok
-            Application(bundleIdentifier: "com.burbn.instagram")         // Instagram
-        ]
+        let selection = BlockedAppStore.shared.selection
+        let bundleIds = selection.isEmpty ? BlockedAppCatalog.defaultSelection : selection
+        let blockedApps: Set<Application> = Set(bundleIds.map { Application(bundleIdentifier: $0) })
 
         store.application.blockedApplications = blockedApps
         print("Apps blocked")
