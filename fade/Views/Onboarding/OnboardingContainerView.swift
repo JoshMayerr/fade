@@ -17,16 +17,12 @@ struct OnboardingContainerView: View {
     var body: some View {
         TabView(selection: $currentStep) {
             WelcomeView(onContinue: {
-                withAnimation {
-                    currentStep = 1
-                }
+                currentStep = 1
             })
             .tag(0)
 
             AppSelectionView(onContinue: {
-                withAnimation {
-                    currentStep = 2
-                }
+                currentStep = 2
             })
             .tag(1)
 
@@ -43,6 +39,7 @@ struct OnboardingContainerView: View {
             .tag(2)
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+        .animation(.easeInOut, value: currentStep)
         .background(Color.appBackground.ignoresSafeArea())
     }
 }
