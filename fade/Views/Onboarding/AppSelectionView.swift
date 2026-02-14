@@ -9,7 +9,13 @@ import SwiftUI
 
 struct AppSelectionView: View {
     let onContinue: () -> Void
-    @State private var stagedSelection: Set<String> = BlockedAppCatalog.defaultSelection
+    @State private var stagedSelection: Set<String>
+    @StateObject private var store = BlockedAppStore.shared
+
+    init(onContinue: @escaping () -> Void) {
+        self.onContinue = onContinue
+        _stagedSelection = State(initialValue: BlockedAppStore.shared.selection)
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -31,34 +37,53 @@ struct AppSelectionView: View {
                 .padding(.horizontal, 24)
 
             Spacer()
-                .frame(height: 12)
+                .frame(height: 24)
 
-            List {
-                Section {
-                    ForEach(BlockedAppCatalog.catalog) { app in
-                        Toggle(isOn: Binding(
-                            get: { stagedSelection.contains(app.bundleId) },
-                            set: { isSelected in
+            ScrollView {
+                VStack(alignment: .leading, spacing: 12) {
+                    VStack(spacing: 20) {
+                        ForEach(BlockedAppCatalog.catalog) { app in
+                            let isSelected = stagedSelection.contains(app.bundleId)
+
+                            Button(action: {
                                 if isSelected {
-                                    stagedSelection.insert(app.bundleId)
-                                } else {
                                     stagedSelection.remove(app.bundleId)
+                                } else {
+                                    stagedSelection.insert(app.bundleId)
                                 }
+                            }) {
+                                HStack(spacing: 24) {
+                                    Text(app.name)
+                                        .font(.ibmPlexMono(size: 16, weight: .semibold))
+                                        .foregroundColor(.textPrimary)
+
+                                    Spacer()
+
+                                    if isSelected {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundColor(.accentBrand)
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 20)
+                                .background(Color.surface)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .stroke(isSelected ? Color.accentBrand.opacity(0.35) : Color.borderHairline, lineWidth: 3)
+                                )
+                                .cornerRadius(14)
+                                .contentShape(Rectangle())
                             }
-                        )) {
-                            Text(app.name)
+                            .buttonStyle(.plain)
                         }
                     }
-                } header: {
-                    Text("Blocked Apps")
-                } footer: {
-                    Text("Pick at least one app to continue.")
-                        .foregroundColor(.textMuted)
+                    .padding(.horizontal, 24)
+
                 }
+                .padding(.vertical, 12)
             }
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .listRowSeparatorTint(.borderHairline)
             .background(Color.appBackground.ignoresSafeArea())
 
             Spacer()
@@ -83,8 +108,12 @@ struct AppSelectionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBackground.ignoresSafeArea())
-        .onAppear {
-            stagedSelection = BlockedAppStore.shared.selection
+        .onChange(of: store.selection) { _, newValue in
+            var transaction = Transaction()
+            transaction.animation = nil
+            withTransaction(transaction) {
+                stagedSelection = newValue
+            }
         }
     }
 }

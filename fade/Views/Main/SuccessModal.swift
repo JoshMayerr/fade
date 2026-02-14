@@ -20,27 +20,24 @@ struct SuccessModal: View {
                 Spacer()
                     .frame(height: 40)
 
-                // check mark icon
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundColor(.accentBrand)
-                    .font(.system(size: 30))
-
                 // Header
-                Text("done!")
-                    .padding(.top, 10)
-                    .font(.ibmPlexMono(size: 14, weight: .semibold))
+                Text("Done")
+                    .font(.joshThick(size: 56))
                     .foregroundColor(.primaryBrand)
+                    .frame(maxWidth: .infinity, alignment: .init(horizontal: .leading, vertical: .center))
+                    .padding(.horizontal, 40)
 
                 Spacer()
-                    .frame(height: 30)
+                    .frame(height: 20)
 
                 // Description text
-                VStack(spacing: 14) {
-                    Text("your selected apps are gone. seriously go look. they have disappeared!")
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Your selected apps are gone. Seriously go look. They have disappeared!")
                         .font(.ibmPlexMono(size: 14, weight: .semibold))
                         .foregroundColor(.primaryBrand)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 44)
                 }
 
                 Spacer()
@@ -68,7 +65,7 @@ struct SuccessModal: View {
             }
         }
         .background(Color.appBackground.ignoresSafeArea())
-        .presentationDetents([.height(250)])
+        .presentationDetents([.height(200)])
         .onAppear {
             // Auto-block apps and set first block date
             manager.blockApps()
