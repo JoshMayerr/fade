@@ -18,6 +18,12 @@ struct AppSelectionView: View {
             return "tiktok"
         case "com.burbn.instagram":
             return "ig"
+        case "com.toyopagroup.picaboo":
+            return "snap"
+        case "com.google.ios.youtube":
+            return "yt"
+        case "com.atebits.Tweetie2":
+            return "x"
         default:
             return nil
         }

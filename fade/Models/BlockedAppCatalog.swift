@@ -20,12 +20,11 @@ enum BlockedAppCatalog {
         BlockableApp(name: "Instagram", bundleId: "com.burbn.instagram"),
         BlockableApp(name: "YouTube", bundleId: "com.google.ios.youtube"),
         BlockableApp(name: "Snapchat", bundleId: "com.toyopagroup.picaboo"),
-        BlockableApp(name: "Facebook", bundleId: "com.facebook.Facebook")
+        BlockableApp(name: "X", bundleId: "com.atebits.Tweetie2")
     ]
 
     static let defaultSelection: Set<String> = [
-        "com.zhiliaoapp.musically",
-        "com.burbn.instagram"
+        "com.zhiliaoapp.musically"
     ]
 
     static let catalogBundleIds: Set<String> = Set(catalog.map { $0.bundleId })
