@@ -1,4 +1,4 @@
-const { sql } = require("@vercel/postgres");
+const { sql } = require("./_db");
 const { sendJson, methodNotAllowed } = require("./_utils");
 const { getBearerToken, getProfileByToken } = require("./_auth");
 

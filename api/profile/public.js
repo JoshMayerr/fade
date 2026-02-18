@@ -1,4 +1,4 @@
-const { sql } = require("@vercel/postgres");
+const { sql } = require("../_db");
 const { sendJson, methodNotAllowed, getUrl } = require("../_utils");
 
 module.exports = async (req, res) => {

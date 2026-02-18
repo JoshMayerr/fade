@@ -1,4 +1,4 @@
-const { sql } = require("@vercel/postgres");
+const { sql } = require("../_db");
 const { readJson, sendJson, methodNotAllowed } = require("../_utils");
 const { randomToken } = require("../_tokens");
 

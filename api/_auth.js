@@ -1,4 +1,4 @@
-const { sql } = require("@vercel/postgres");
+const { sql } = require("./_db");
 
 const getBearerToken = (req) => {
   const header = req.headers.authorization || "";

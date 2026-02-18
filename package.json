@@ -2,6 +2,6 @@
   "name": "fade",
   "private": true,
   "dependencies": {
-    "@vercel/postgres": "^0.7.1"
+    "@neondatabase/serverless": "^0.10.4"
   }
 }
