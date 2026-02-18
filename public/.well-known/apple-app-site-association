@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "U7L34RT4W5.joshmayer.fade",
+        "paths": [
+          "/i/*",
+          "/p/*"
+        ]
+      }
+    ]
+  }
+}

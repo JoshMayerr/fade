@@ -104,6 +104,39 @@ struct SettingsView: View {
                     Spacer()
                         .frame(height: 12)
 
+                    Text("Friends")
+                        .font(.ibmPlexMono(size: 14, weight: .semibold))
+                        .foregroundColor(.textSecondary)
+                        .padding(.horizontal, 24)
+
+                    VStack(spacing: 0) {
+                        NavigationLink(destination: FriendsView()) {
+                            HStack {
+                                Text("View friends")
+                                    .font(.ibmPlexMono(size: 16, weight: .semibold))
+                                    .foregroundColor(.textPrimary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .foregroundColor(.textSecondary)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 20)
+                            .background(Color.surface)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                    .stroke(Color.borderHairline, lineWidth: 3)
+                            )
+                            .cornerRadius(14)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .padding(.horizontal, 24)
+
+                    Spacer()
+                        .frame(height: 12)
+
                     Text("About")
                         .font(.ibmPlexMono(size: 14, weight: .semibold))
                         .foregroundColor(.textSecondary)

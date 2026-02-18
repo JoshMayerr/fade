@@ -1,0 +1,7 @@
+{
+  "name": "fade",
+  "private": true,
+  "dependencies": {
+    "@vercel/postgres": "^0.7.1"
+  }
+}

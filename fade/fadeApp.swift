@@ -10,6 +10,8 @@ import UIKit
 
 @main
 struct fadeApp: App {
+    @StateObject private var profileManager = ProfileManager.shared
+
     init() {
         UIView.appearance().overrideUserInterfaceStyle = .light
     }
@@ -17,8 +19,17 @@ struct fadeApp: App {
     var body: some Scene {
         WindowGroup {
             AppRootView()
+                .environmentObject(profileManager)
                 .preferredColorScheme(.light)
                 .tint(.accentBrand)
+                .task {
+                    await profileManager.ensureProfile()
+                }
+                .onOpenURL { url in
+                    Task {
+                        await profileManager.handleDeepLink(url)
+                    }
+                }
         }
     }
 }

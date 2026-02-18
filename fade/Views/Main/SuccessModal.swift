@@ -10,6 +10,7 @@ import SwiftUI
 struct SuccessModal: View {
     @ObservedObject var manager: ScreenTimeManager
     @Binding var isPresented: Bool
+    @EnvironmentObject private var profileManager: ProfileManager
 
     @AppStorage("firstBlockDate") private var firstBlockDate: Double = 0
     @AppStorage("isBlocking") private var isBlocking = false
@@ -71,9 +72,12 @@ struct SuccessModal: View {
             manager.blockApps()
             isBlocking = true
 
-            // Set first block date if not already set
-            if firstBlockDate == 0 {
-                firstBlockDate = Date().timeIntervalSince1970
+            Task {
+                if let startAt = await profileManager.startBlocking() {
+                    firstBlockDate = startAt.timeIntervalSince1970
+                } else if firstBlockDate == 0 {
+                    firstBlockDate = Date().timeIntervalSince1970
+                }
             }
         }
     }
@@ -84,4 +88,5 @@ struct SuccessModal: View {
         manager: ScreenTimeManager.shared,
         isPresented: .constant(true)
     )
+    .environmentObject(ProfileManager.shared)
 }

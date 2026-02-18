@@ -1,0 +1,103 @@
+@font-face {
+  font-family: "IBMPlexMono";
+  src: url("IBMPlexMono-Medium.ttf") format("truetype");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Joshfont2";
+  src: url("Joshfont2-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #010101;
+  --background: #e0dee3;
+  --accent: #1c01cc;
+}
+
+body {
+  font-family: "IBMPlexMono", "Courier New", monospace;
+  background-color: var(--background);
+  color: var(--primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.logo {
+  height: 50px;
+  width: 100px;
+  max-width: 100%;
+  color: var(--accent);
+  margin-bottom: 30px;
+  display: block;
+}
+
+h1 {
+  font-family: "Joshfont2", sans-serif;
+  font-size: 14px;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 14px;
+  color: var(--primary);
+  margin-bottom: 20px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+.highlight {
+  color: var(--accent);
+}
+
+.coming-soon {
+  text-decoration: line-through;
+}
+
+.waitlist-form {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  font-size: 14px;
+  font-family: "IBMPlexMono", "Courier New", monospace;
+  margin-bottom: 20px;
+}
+
+.waitlist-input {
+  padding: 10px;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+  background-color: var(--background);
+  color: var(--primary);
+}
+
+.waitlist-button {
+  padding: 10px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  background-color: var(--accent);
+  color: var(--background);
+}

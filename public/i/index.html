@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fade invite</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .invite-card {
+        margin-top: 24px;
+        padding: 20px;
+        border-radius: 14px;
+        background: #f7f6f9;
+        border: 3px solid #d8d4df;
+        text-align: center;
+      }
+      .invite-actions {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .invite-actions a {
+        padding: 10px 16px;
+        border-radius: 999px;
+        border: 2px solid #000;
+        text-decoration: none;
+        color: #000;
+        font-weight: 600;
+      }
+      .invite-actions a.primary {
+        background: #000;
+        color: #fff;
+      }
+      .note {
+        font-size: 12px;
+        opacity: 0.7;
+        margin-top: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="/logo.svg"
+        alt="fade"
+        class="logo"
+        draggable="false"
+        width="100"
+        height="50"
+      />
+      <div class="invite-card">
+        <h2 id="invite-title">You were invited to fade</h2>
+        <p id="invite-subtitle">Tap the link to open in the app.</p>
+        <div class="invite-actions">
+          <a id="open-link" class="primary" href="#">Open in fade</a>
+          <a id="install-link" href="#">Get the app</a>
+        </div>
+        <p class="note">
+          If you just installed the app, return to your messages and tap the
+          invite link again.
+        </p>
+      </div>
+    </div>
+    <script src="/invite.js"></script>
+  </body>
+</html>

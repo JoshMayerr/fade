@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/i/:code", "destination": "/i/index.html" },
+    { "source": "/p/:shareId", "destination": "/p/index.html" }
+  ]
+}
