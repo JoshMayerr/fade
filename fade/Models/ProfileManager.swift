@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 @MainActor
 final class ProfileManager: ObservableObject {
@@ -19,7 +20,10 @@ final class ProfileManager: ObservableObject {
     }
 
     var displayName: String {
-        UserDefaults.standard.string(forKey: displayNameKey) ?? ""
+        if let stored = UserDefaults.standard.string(forKey: displayNameKey), !stored.isEmpty {
+            return stored
+        }
+        return UIDevice.current.name
     }
 
     func ensureProfile() async {

@@ -9,7 +9,7 @@ struct FriendsView: View {
     @State private var inviteCode = ""
     @State private var showError = false
     @State private var errorMessage = ""
-    @State private var displayName = UserDefaults.standard.string(forKey: "profileDisplayName") ?? ""
+    @State private var displayName = ProfileManager.shared.displayName
 
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
@@ -115,7 +115,7 @@ struct FriendsView: View {
         .navigationTitle("Friends")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            displayName = UserDefaults.standard.string(forKey: "profileDisplayName") ?? ""
+            displayName = profileManager.displayName
             Task { await profileManager.fetchFriends() }
         }
         .onReceive(timer) { _ in
