@@ -31,38 +31,24 @@ struct FriendsListView: View {
             }
 
             if friends.isEmpty {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("No friends yet.")
+                VStack(spacing: 16) {
+                    Text("no friends :(")
                         .font(.ibmPlexMono(size: 16, weight: .semibold))
                         .foregroundColor(.textPrimary)
 
-                    Text("Invite someone to see their counter here.")
-                        .font(.ibmPlexMono(size: 12, weight: .medium))
-                        .foregroundColor(.textMuted)
-
                     Button(action: onAddFriend) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "square.and.arrow.up")
-                                .font(.system(size: 12, weight: .semibold))
-                            Text("Share invite link")
-                                .font(.ibmPlexMono(size: 12, weight: .semibold))
-                        }
-                        .foregroundColor(.onAccent)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, 12)
-                        .background(Color.accentBrand)
-                        .cornerRadius(12)
+                        Text("add friend")
+                            .font(.ibmPlexMono(size: 12, weight: .semibold))
+                            .foregroundColor(.onAccent)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(.vertical, 12)
+                            .background(Color.accentBrand)
+                            .cornerRadius(12)
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(16)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.surface)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14, style: .continuous)
-                        .stroke(Color.borderHairline, lineWidth: 3)
-                )
-                .cornerRadius(14)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.vertical, 24)
             } else {
                 ScrollView {
                     VStack(spacing: 12) {
