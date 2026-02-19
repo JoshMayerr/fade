@@ -11,11 +11,18 @@ import SwiftUI
 
 struct MainView: View {
     @StateObject private var manager = ScreenTimeManager.shared
+    @EnvironmentObject private var profileManager: ProfileManager
     @AppStorage("firstBlockDate") private var firstBlockDate: Double = 0
     @AppStorage("isBlocking") private var isBlocking = false
     @AppStorage("shouldShowSuccessModal") private var shouldShowSuccessModal = false
     @State private var currentTime = Date()
     @State private var showSuccessModal = false
+    @State private var selectedTab: MainTab = .counter
+    @State private var shareURL: URL?
+    @State private var isSharing = false
+    @State private var showError = false
+    @State private var errorMessage = ""
+    @State private var fadeState: FadeState = .counter
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     private var timeComponents: TimeComponents {
@@ -36,72 +43,58 @@ struct MainView: View {
 
     var body: some View {
         NavigationStack {
-            ZStack {
-                Color.appBackground.ignoresSafeArea()
+            TabView(selection: $selectedTab) {
+                CounterTab(
+                    timeComponents: timeComponents,
+                    formattedDate: formattedDate,
+                    fadeState: fadeState
+                )
+                .environmentObject(profileManager)
+                .tag(MainTab.counter)
+                .tabItem {
+                    Image(systemName: "timer")
+                    Text("Counter")
+                }
 
-                VStack(spacing: 0) {
-                    // Logo and settings button
-                    HStack {
-                        Image("FadeLogo")
-                            .resizable()
-                            .renderingMode(.template)
-                            .aspectRatio(contentMode: .fit)
-                            .frame(height: 40)
-                            .padding(.leading, 20)
-                            .padding(.top, 8)
-
-                        Spacer()
-
-                        NavigationLink(destination: SettingsView()) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(.primaryBrand)
-                                .frame(width: 44, height: 44)
-                                .background(Color.surface)
-                                .clipShape(Circle())
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.top, 8)
-                    }
-
-                    Spacer()
-
-                    // Counter: 3×2 grid (3 rows, 2 columns)
-                    VStack(spacing: 20) {
-                        HoloCardView {
-                            VStack(spacing: 24) {
-                                // Row 1: Y, M
-                                HStack(spacing: 20) {
-                                    CounterCell(value: timeComponents.years, label: "Y")
-                                    CounterCell(value: timeComponents.months, label: "M")
-                                }
-                                // Row 2: D, H
-                                HStack(spacing: 20) {
-                                    CounterCell(value: timeComponents.days, label: "D")
-                                    CounterCell(value: timeComponents.hours, label: "H")
-                                }
-                                // Row 3: M, S
-                                HStack(spacing: 20) {
-                                    CounterCell(value: timeComponents.minutes, label: "M")
-                                    CounterCell(value: timeComponents.seconds, label: "S")
-                                }
+                FriendsTab(
+                    referenceDate: currentTime,
+                    fadeState: fadeState,
+                    onAddFriend: {
+                        Task {
+                            do {
+                                let url = try await profileManager.createInvite()
+                                shareURL = url
+                                isSharing = true
+                            } catch {
+                                errorMessage = error.localizedDescription
+                                showError = true
                             }
                         }
-                        .padding(.horizontal, 32)
-
-                        Text("free since \(formattedDate)")
-                            .font(.ibmPlexMono(size: 12, weight: .medium))
-                            .foregroundColor(.textSubtle)
                     }
-
-                    Spacer()
-                }
+                )
+                    .environmentObject(profileManager)
+                    .tag(MainTab.friends)
+                    .tabItem {
+                        Image(systemName: "person.2.fill")
+                        Text("Friends")
+                    }
             }
+            .background(Color.appBackground.ignoresSafeArea())
         }
         .background(Color.appBackground.ignoresSafeArea())
         .sheet(isPresented: $showSuccessModal) {
             SuccessModal(manager: manager, isPresented: $showSuccessModal)
         }
+        .sheet(isPresented: $isSharing) {
+            if let shareURL {
+                ShareSheet(items: [shareURL])
+            }
+        }
+        .alert("Something went wrong", isPresented: $showError, actions: {
+            Button("OK", role: .cancel) {}
+        }, message: {
+            Text(errorMessage)
+        })
         .onReceive(timer) { _ in
             currentTime = Date()
         }
@@ -117,9 +110,139 @@ struct MainView: View {
                 shouldShowSuccessModal = false
             }
         }
+        .onChange(of: selectedTab) { _, newValue in
+            if newValue == .friends {
+                Task { await profileManager.fetchFriends() }
+            } else {
+            }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                fadeState = newValue == .friends ? .friends : .counter
+            }
+        }
+        .onChange(of: profileManager.lastErrorMessage) { _, message in
+            if let message {
+                errorMessage = message
+                showError = true
+                profileManager.lastErrorMessage = nil
+            }
+        }
         .onChange(of: showSuccessModal) { newValue in
             if !newValue {
                 shouldShowSuccessModal = false
+            }
+        }
+    }
+}
+
+private enum MainTab: Hashable {
+    case counter
+    case friends
+}
+
+private enum FadeState {
+    case counter
+    case friends
+}
+private struct MainHeader: View {
+    var body: some View {
+        HStack {
+            Image("FadeLogo")
+                .resizable()
+                .renderingMode(.template)
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 40)
+                .padding(.leading, 20)
+                .padding(.top, 8)
+
+            Spacer()
+
+            NavigationLink(destination: SettingsView()) {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 20, weight: .medium))
+                    .foregroundColor(.primaryBrand)
+                    .frame(width: 44, height: 44)
+                    .background(Color.surface)
+                    .clipShape(Circle())
+            }
+            .padding(.trailing, 20)
+            .padding(.top, 8)
+        }
+    }
+}
+
+private struct CounterTab: View {
+    let timeComponents: TimeComponents
+    let formattedDate: String
+    let fadeState: FadeState
+
+    var body: some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                MainHeader()
+
+                Spacer()
+
+                VStack(spacing: 20) {
+                    HoloCardView {
+                        VStack(spacing: 24) {
+                            HStack(spacing: 20) {
+                                CounterCell(value: timeComponents.years, label: "Y")
+                                CounterCell(value: timeComponents.months, label: "M")
+                            }
+                            HStack(spacing: 20) {
+                                CounterCell(value: timeComponents.days, label: "D")
+                                CounterCell(value: timeComponents.hours, label: "H")
+                            }
+                            HStack(spacing: 20) {
+                                CounterCell(value: timeComponents.minutes, label: "M")
+                                CounterCell(value: timeComponents.seconds, label: "S")
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 32)
+                    .opacity(fadeState == .counter ? 1 : 0)
+                    .animation(.easeInOut(duration: 0.25), value: fadeState)
+
+                    Text("free since \(formattedDate)")
+                        .font(.ibmPlexMono(size: 12, weight: .medium))
+                        .foregroundColor(.textSubtle)
+                }
+
+                Spacer()
+            }
+        }
+    }
+}
+
+private struct FriendsTab: View {
+    @EnvironmentObject private var profileManager: ProfileManager
+    let referenceDate: Date
+    let fadeState: FadeState
+    let onAddFriend: () -> Void
+
+    var body: some View {
+        ZStack {
+            Color.appBackground.ignoresSafeArea()
+
+            VStack(spacing: 0) {
+                MainHeader()
+
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16) {
+                        FriendsListView(
+                            friends: profileManager.friends,
+                            referenceDate: referenceDate,
+                            onAddFriend: onAddFriend
+                        )
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 24)
+                    .padding(.bottom, 32)
+                }
+                .opacity(fadeState == .friends ? 1 : 0)
+                .animation(.easeInOut(duration: 0.25), value: fadeState)
             }
         }
     }

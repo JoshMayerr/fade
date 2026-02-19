@@ -10,9 +10,12 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject private var blockedAppStore = BlockedAppStore.shared
     @StateObject private var manager = ScreenTimeManager.shared
+    @EnvironmentObject private var profileManager: ProfileManager
     @AppStorage("isBlocking") private var isBlocking = false
     @State private var pendingAddApp: BlockableApp?
     @State private var isConfirmingAdd = false
+    @State private var displayName = ProfileManager.shared.displayName
+    @FocusState private var isNameFocused: Bool
 
     private func iconName(for app: BlockableApp) -> String? {
         switch app.bundleId {
@@ -104,33 +107,29 @@ struct SettingsView: View {
                     Spacer()
                         .frame(height: 12)
 
-                    Text("Friends")
+                    Text("Your name")
                         .font(.ibmPlexMono(size: 14, weight: .semibold))
                         .foregroundColor(.textSecondary)
                         .padding(.horizontal, 24)
 
-                    VStack(spacing: 0) {
-                        NavigationLink(destination: FriendsView()) {
-                            HStack {
-                                Text("View friends")
-                                    .font(.ibmPlexMono(size: 16, weight: .semibold))
-                                    .foregroundColor(.textPrimary)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.system(size: 12, weight: .semibold))
-                                    .foregroundColor(.textSecondary)
+                    VStack(spacing: 8) {
+                        TextField("Display name", text: $displayName)
+                            .textInputAutocapitalization(.words)
+                            .autocorrectionDisabled()
+                            .font(.ibmPlexMono(size: 16, weight: .semibold))
+                            .textFieldStyle(.roundedBorder)
+                            .focused($isNameFocused)
+                            .submitLabel(.done)
+                            .onSubmit {
+                                Task {
+                                    await profileManager.updateDisplayName(displayName)
+                                }
                             }
+
+                        Text("This is what friends will see.")
+                            .font(.ibmPlexMono(size: 12, weight: .medium))
+                            .foregroundColor(.textMuted)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 20)
-                            .background(Color.surface)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color.borderHairline, lineWidth: 3)
-                            )
-                            .cornerRadius(14)
-                        }
-                        .buttonStyle(.plain)
                     }
                     .padding(.horizontal, 24)
 
@@ -163,20 +162,23 @@ struct SettingsView: View {
                         .cornerRadius(14)
                     }
                     .padding(.horizontal, 24)
+
+                    Text("by josh mayer")
+                        .font(.ibmPlexMono(size: 12))
+                        .foregroundColor(.textMuted)
+                        .padding(.horizontal, 24)
+                        .padding(.top, 8)
                 }
                 .padding(.vertical, 12)
             }
             .background(Color.appBackground.ignoresSafeArea())
-
-            // Attribution text
-            Text("by josh mayer")
-                .font(.ibmPlexMono(size: 12))
-                .foregroundColor(.textMuted)
-                .padding(.bottom, 20)
         }
         .background(Color.appBackground.ignoresSafeArea())
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            displayName = profileManager.displayName
+        }
         .onChange(of: blockedAppStore.selection) { _ in
             if isBlocking {
                 manager.blockApps()
@@ -192,6 +194,16 @@ struct SettingsView: View {
             }
         } message: { app in
             Text("\(app.name) will be blocked from now on. You can't remove it later.")
+        }
+        .toolbar {
+            ToolbarItem(placement: .keyboard) {
+                Spacer()
+            }
+            ToolbarItem(placement: .keyboard) {
+                Button("Done") {
+                    isNameFocused = false
+                }
+            }
         }
     }
 }

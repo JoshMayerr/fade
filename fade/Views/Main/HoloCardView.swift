@@ -12,8 +12,10 @@ struct HoloCardView<Content: View>: View {
     @State private var touchTiltX: Double = 0
     @State private var touchTiltY: Double = 0
     private let content: Content
+    private let height: CGFloat
 
-    init(@ViewBuilder content: () -> Content) {
+    init(height: CGFloat = 320, @ViewBuilder content: () -> Content) {
+        self.height = height
         self.content = content()
     }
 
@@ -78,7 +80,7 @@ struct HoloCardView<Content: View>: View {
                 .padding(24)
         }
         .frame(maxWidth: 340)
-        .frame(height: 320)
+        .frame(height: height)
         .rotation3DEffect(.degrees(combinedTiltX), axis: (x: 1, y: 0, z: 0))
         .rotation3DEffect(.degrees(combinedTiltY), axis: (x: 0, y: 1, z: 0))
         .shadow(color: Color.black.opacity(0.18), radius: 22, x: 0, y: 14)
