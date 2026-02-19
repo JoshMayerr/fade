@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     return sendJson(res, 401, { error: "unauthorized" });
   }
 
-  const { rows } = await sql`
+  const rows = await sql`
     select p.share_id, p.display_name, p.start_at
     from friends f
     join profiles p on p.id = f.friend_id

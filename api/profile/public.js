@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     return sendJson(res, 400, { error: "missing_share_id" });
   }
 
-  const { rows } = await sql`
+  const rows = await sql`
     select share_id, display_name, start_at
     from profiles
     where share_id = ${shareId}

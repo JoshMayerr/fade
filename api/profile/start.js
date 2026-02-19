@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     return sendJson(res, 401, { error: "unauthorized" });
   }
 
-  const { rows } = await sql`
+  const rows = await sql`
     update profiles
     set start_at = coalesce(start_at, now())
     where id = ${profile.id}

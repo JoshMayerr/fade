@@ -12,7 +12,7 @@ const getProfileByToken = async (token) => {
   if (!token) {
     return null;
   }
-  const { rows } = await sql`
+  const rows = await sql`
     select id, share_id, write_token, display_name, start_at
     from profiles
     where write_token = ${token}

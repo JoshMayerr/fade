@@ -136,7 +136,7 @@ struct FriendsView: View {
                 isShowingInviteSheet = false
             }
         }
-        .onChange(of: profileManager.lastErrorMessage) { message in
+        .onChange(of: profileManager.lastErrorMessage) { _, message in
             if let message {
                 errorMessage = message
                 showError = true

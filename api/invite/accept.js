@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     return sendJson(res, 401, { error: "unauthorized" });
   }
 
-  const { rows } = await sql`
+  const rows = await sql`
     select code, inviter_profile_id, expires_at, used_by
     from invites
     where code = ${inviteCode}

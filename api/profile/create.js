@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
     const shareId = randomToken(12);
     const writeToken = randomToken(24);
     try {
-      const { rows } = await sql`
+      const rows = await sql`
         insert into profiles (share_id, write_token, display_name)
         values (${shareId}, ${writeToken}, ${displayName})
         returning id, share_id, write_token

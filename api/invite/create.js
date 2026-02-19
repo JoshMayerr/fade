@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
     const code = randomString(8);
     try {
-      const { rows } = await sql`
+      const rows = await sql`
         insert into invites (code, inviter_profile_id, expires_at)
         values (${code}, ${profile.id}, now() + interval '7 days')
         returning code
