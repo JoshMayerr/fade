@@ -22,7 +22,7 @@ The blocking works at the system level - once apps are added to `blockedApplicat
 
 ## Requirements
 
-- iOS 15.0+
+- iOS 18.5+
 - Xcode 14.0+
 - Screen Time authorization (user must grant permission)
 - Family Controls entitlement
