@@ -17,7 +17,6 @@ struct MainView: View {
     @State private var currentTime = Date()
     @State private var showSuccessModal = false
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
     private var timeComponents: TimeComponents {
         if firstBlockDate == 0 {
             return TimeComponents(years: 0, months: 0, days: 0, hours: 0, minutes: 0, seconds: 0)
